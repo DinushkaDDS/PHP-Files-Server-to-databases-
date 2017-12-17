@@ -36,8 +36,19 @@ if (isset($data["patient_nic"]) && isset($data["firstName"]) && isset($data["mid
     $hint = $data['hint'];
     $password = $data['password'];
     
-    $text = "INSERT INTO `patient` (`patient_nic`, `first_name`, `middle_name`, `last_name`, `gender`, `date_of_birth`, `age`, `house_number`, `street`, `town`, `city`, `province`, `contact_no`) VALUES ('".$patient_nic."', '".$first_name."', '".$middle_name."', '".$last_name."', '".$gender."', '".$birthday."', '".$age."','".$houseNo."', '".$street."', '".$town."', '".$city."', '".$province."', '".$contactNo."')";
-    $result = mysqli_query($con, $text);
+    $stmt = $con->prepare("INSERT INTO `patient` (`patient_nic`, `first_name`, `middle_name`, `last_name`, `gender`, `date_of_birth`, `age`, `house_number`, `street`, `town`, `city`, `province`, `contact_no`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+	$stmt->bind_param("sssssssssssss",$patient_nic,$first_name,$middle_name,$last_name,$gender,$birthday,$age,$houseNo,$street,$town,$city,$province,$contactNo);
+	$stmt->execute();
+	if($stmt->affected_rows !== 0){
+		$result = true;
+	}
+	else{
+		$result = false;
+	}
+	$stmt->close();
+    
+    //$text = "INSERT INTO `patient` (`patient_nic`, `first_name`, `middle_name`, `last_name`, `gender`, `date_of_birth`, `age`, `house_number`, `street`, `town`, `city`, `province`, `contact_no`) VALUES ('".$patient_nic."', '".$first_name."', '".$middle_name."', '".$last_name."', '".$gender."', '".$birthday."', '".$age."','".$houseNo."', '".$street."', '".$town."', '".$city."', '".$province."', '".$contactNo."')";
+    //$result = mysqli_query($con, $text);
     
     if($result === true){
 		
